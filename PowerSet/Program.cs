@@ -11,23 +11,25 @@ namespace AlgorithmsDataStructures
 	{
 		static void Main(string[] args)
 		{
-		  //1. 2 пустых
+			//1. 2 пустых
 			//2. пустой, со значениями
 			//3. со значениями, пустой
 			//4. больше значений, меньше значений
 			//5. меньше значений, больше
 			//6. нет общих
-			
+
 			//TestPowerSet();
 
-			TestIntersection(CreateEmptyPowerSet(), CreateEmptyPowerSet());
-			TestIntersection(CreateEmptyPowerSet(), CreatePowerSet(10, 20));
+			Func<PowerSet<int>, PowerSet<int>, PowerSet<int>> intersectionFunc = (set1, set2) =>  set1.Intersection(set2);
 
-			TestIntersection(CreatePowerSet(10,20), CreateEmptyPowerSet());
-			TestIntersection(CreatePowerSet(10, 50), CreatePowerSet(20, 35));
+			TestFunc(CreateEmptyPowerSet(), CreateEmptyPowerSet(), intersectionFunc);
+			TestFunc(CreateEmptyPowerSet(), CreatePowerSet(10, 20), intersectionFunc);
 
-			TestIntersection(CreatePowerSet(20, 25), CreatePowerSet(10, 50));
-			TestIntersection(CreatePowerSet(10, 20), CreatePowerSet(30, 40));
+			TestFunc(CreatePowerSet(10,20), CreateEmptyPowerSet(), intersectionFunc);
+			TestFunc(CreatePowerSet(10, 50), CreatePowerSet(20, 35), intersectionFunc);
+
+			TestFunc(CreatePowerSet(20, 25), CreatePowerSet(10, 50), intersectionFunc);
+			TestFunc(CreatePowerSet(10, 20), CreatePowerSet(30, 40), intersectionFunc);
 
 
 
@@ -103,7 +105,7 @@ namespace AlgorithmsDataStructures
 
 		}
 
-		static void TestIntersection(PowerSet<int> set1, PowerSet<int> set2)
+		static void TestFunc(PowerSet<int> set1, PowerSet<int> set2, Func<PowerSet<int>, PowerSet<int>, PowerSet<int>> testFunc)
 		{
 			if(set1.Size() == 0 )
 				Console.Write("set1 is empty");
@@ -133,7 +135,8 @@ namespace AlgorithmsDataStructures
 
 			Console.WriteLine();
 
-			PowerSet<int> resultSet = set1.Intersection(set2);
+			PowerSet<int> resultSet = testAction(set1, set2);
+
 			if (resultSet.Size() == 0)
 				Console.Write("result set is empty");
 			else
@@ -149,6 +152,11 @@ namespace AlgorithmsDataStructures
 			Console.WriteLine();
 
 			Console.WriteLine(new string('=', 50));
+		}
+
+		static void TestUnion(PowerSet<int> set1, PowerSet<int> set2)
+		{
+
 		}
 
 		static PowerSet<int> CreatePowerSet(int startValue, int finishValue)
