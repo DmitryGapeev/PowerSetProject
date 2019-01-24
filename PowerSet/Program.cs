@@ -11,29 +11,14 @@ namespace AlgorithmsDataStructures
 	{
 		static void Main(string[] args)
 		{
-			//1. 2 пустых
-			//2. пустой, со значениями
-			//3. со значениями, пустой
-			//4. больше значений, меньше значений
-			//5. меньше значений, больше
-			//6. нет общих
+			TestPowerSet();
+      TestIntersection();
 
-			//TestPowerSet();
+      TestUnion();
+      TestDifference();
+		  TestIsSubset();
 
-			Func<PowerSet<int>, PowerSet<int>, PowerSet<int>> intersectionFunc = (set1, set2) =>  set1.Intersection(set2);
-
-			TestFunc(CreateEmptyPowerSet(), CreateEmptyPowerSet(), intersectionFunc);
-			TestFunc(CreateEmptyPowerSet(), CreatePowerSet(10, 20), intersectionFunc);
-
-			TestFunc(CreatePowerSet(10,20), CreateEmptyPowerSet(), intersectionFunc);
-			TestFunc(CreatePowerSet(10, 50), CreatePowerSet(20, 35), intersectionFunc);
-
-			TestFunc(CreatePowerSet(20, 25), CreatePowerSet(10, 50), intersectionFunc);
-			TestFunc(CreatePowerSet(10, 20), CreatePowerSet(30, 40), intersectionFunc);
-
-
-
-			Console.ReadKey();
+      Console.ReadKey();
 		}
 
 		static void TestPowerSet()
@@ -105,7 +90,67 @@ namespace AlgorithmsDataStructures
 
 		}
 
-		static void TestFunc(PowerSet<int> set1, PowerSet<int> set2, Func<PowerSet<int>, PowerSet<int>, PowerSet<int>> testFunc)
+	  static void TestIntersection()
+	  {
+	    Func<PowerSet<int>, PowerSet<int>, PowerSet<int>> intersectionFunc = (set1, set2) => set1.Intersection(set2);
+
+      Console.WriteLine("Intersection test");
+      TestFunc(CreateEmptyPowerSet(), CreateEmptyPowerSet(), intersectionFunc);
+      TestFunc(CreateEmptyPowerSet(), CreatePowerSet(10, 20), intersectionFunc);
+
+      TestFunc(CreatePowerSet(10, 20), CreateEmptyPowerSet(), intersectionFunc);
+      TestFunc(CreatePowerSet(10, 50), CreatePowerSet(20, 35), intersectionFunc);
+
+      TestFunc(CreatePowerSet(20, 25), CreatePowerSet(10, 50), intersectionFunc);
+      TestFunc(CreatePowerSet(10, 20), CreatePowerSet(30, 40), intersectionFunc);
+      TestFunc(CreatePowerSet(10, 23), CreatePowerSet(20, 30), intersectionFunc);
+    }
+
+	  static void TestUnion()
+	  {
+	    Func<PowerSet<int>, PowerSet<int>, PowerSet<int>> unionFunc = (set1, set2) => set1.Union(set2);
+
+      Console.WriteLine("Union test");
+      TestFunc(CreateEmptyPowerSet(), CreateEmptyPowerSet(), unionFunc);
+      TestFunc(CreateEmptyPowerSet(), CreatePowerSet(10, 20), unionFunc);
+
+      TestFunc(CreatePowerSet(10, 20), CreateEmptyPowerSet(), unionFunc);
+      TestFunc(CreatePowerSet(10, 50), CreatePowerSet(20, 35), unionFunc);
+
+      TestFunc(CreatePowerSet(20, 25), CreatePowerSet(10, 50), unionFunc);
+      TestFunc(CreatePowerSet(10, 20), CreatePowerSet(30, 40), unionFunc);
+      TestFunc(CreatePowerSet(10, 23), CreatePowerSet(20, 30), unionFunc);
+    }
+
+	  static void TestDifference()
+	  {
+	    Func<PowerSet<int>, PowerSet<int>, PowerSet<int>> differenceFunc = (set1, set2) => set1.Difference(set2);
+
+      TestFunc(CreateEmptyPowerSet(), CreateEmptyPowerSet(), differenceFunc);
+      TestFunc(CreateEmptyPowerSet(), CreatePowerSet(10, 20), differenceFunc);
+
+      TestFunc(CreatePowerSet(10, 20), CreateEmptyPowerSet(), differenceFunc);
+      TestFunc(CreatePowerSet(10, 50), CreatePowerSet(20, 35), differenceFunc);
+
+      TestFunc(CreatePowerSet(20, 25), CreatePowerSet(10, 50), differenceFunc);
+      TestFunc(CreatePowerSet(10, 20), CreatePowerSet(30, 40), differenceFunc);
+      TestFunc(CreatePowerSet(10, 23), CreatePowerSet(20, 30), differenceFunc);
+    }
+
+	  static void TestIsSubset()
+	  {
+	    TestIsSubset(CreateEmptyPowerSet(), CreateEmptyPowerSet());
+	    TestIsSubset(CreateEmptyPowerSet(), CreatePowerSet(10, 20));
+
+	    TestIsSubset(CreatePowerSet(10, 20), CreateEmptyPowerSet());
+	    TestIsSubset(CreatePowerSet(10, 50), CreatePowerSet(20, 35));
+
+	    TestIsSubset(CreatePowerSet(20, 25), CreatePowerSet(10, 50));
+	    TestIsSubset(CreatePowerSet(10, 20), CreatePowerSet(30, 40));
+	    TestIsSubset(CreatePowerSet(10, 23), CreatePowerSet(20, 30));
+    }
+
+    static void TestFunc(PowerSet<int> set1, PowerSet<int> set2, Func<PowerSet<int>, PowerSet<int>, PowerSet<int>> testFunc)
 		{
 			if(set1.Size() == 0 )
 				Console.Write("set1 is empty");
@@ -153,6 +198,42 @@ namespace AlgorithmsDataStructures
 
 			Console.WriteLine(new string('=', 50));
 		}
+
+	  static void TestIsSubset(PowerSet<int> set1, PowerSet<int> set2)
+	  {
+      if (set1.Size() == 0)
+        Console.Write("set1 is empty");
+      else
+      {
+        Console.WriteLine("set1");
+        for (int i = 0; i < set1._values.Length; i++)
+        {
+          if (set1._slotsStatus[i] == PowerSet<int>.SlotStatus.Fill)
+            Console.Write(set1._values[i] + " ");
+        }
+      }
+
+	    Console.WriteLine();
+
+	    if (set2.Size() == 0)
+	      Console.Write("set2 is empty");
+	    else
+	    {
+	      Console.WriteLine("set2");
+	      for (int i = 0; i < set2._values.Length; i++)
+	      {
+	        if (set2._slotsStatus[i] == PowerSet<int>.SlotStatus.Fill)
+	          Console.Write(set2._values[i] + " ");
+	      }
+	    }
+
+	    Console.WriteLine();
+
+	    bool result = set1.IsSubset(set2);
+      Console.WriteLine("result is subset = " + result);
+
+	    Console.WriteLine(new string('=', 50));
+    }
 
 		static PowerSet<int> CreatePowerSet(int startValue, int finishValue)
 		{
