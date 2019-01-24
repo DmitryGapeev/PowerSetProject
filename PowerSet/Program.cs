@@ -135,7 +135,7 @@ namespace AlgorithmsDataStructures
 
 			Console.WriteLine();
 
-			PowerSet<int> resultSet = testAction(set1, set2);
+			PowerSet<int> resultSet = testFunc(set1, set2);
 
 			if (resultSet.Size() == 0)
 				Console.Write("result set is empty");
@@ -152,11 +152,6 @@ namespace AlgorithmsDataStructures
 			Console.WriteLine();
 
 			Console.WriteLine(new string('=', 50));
-		}
-
-		static void TestUnion(PowerSet<int> set1, PowerSet<int> set2)
-		{
-
 		}
 
 		static PowerSet<int> CreatePowerSet(int startValue, int finishValue)
